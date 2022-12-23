@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  btvdev:
+    build:
+      context: container
+      dockerfile: ../container/Containerfile
+    working_dir: /mnt/dev
+    volumes:
+      - type: bind
+        source: "${WORKDIR:-./}"
+        target: /mnt/dev
