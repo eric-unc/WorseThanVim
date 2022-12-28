@@ -1,2 +1,4 @@
 *.out
 wtv
+.vscode
+.DS_Store
