@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <sys/stat.h>
 
@@ -16,7 +18,7 @@ int main(int argc, char **argv){
 
 	char *path = argv[1];
 
-	struct stat sb;
+	/*struct stat sb;
 
 	FILE *file = nullptr;
 	vector<string> buffer;
@@ -38,8 +40,37 @@ int main(int argc, char **argv){
 		//cout << "The Path is invalid!" << endl;
 		//file = fopen(path, "a+");
 		// initiate buffer
+	}*/
+
+	fstream file;
+	file.open(path, ios::in);
+
+	vector<string> buffer;
+
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			cout << line << endl;
+			buffer.push_back(line);
+		}
+
+		file.close();
+	} else { // file DNE
+		buffer.push_back("");
 	}
 
-	cout << "Hello world!" << endl;
+	file.open(path, ios::out);
+
+	if (!file.is_open()) { // if the file path was invalid, we'll find out here
+		cerr << "Failed to open path!" << endl;
+		return 1;
+	}
+
+	for (size_t i = 0; i < buffer.size(); i++) {
+		file << buffer[i] << endl;
+	}
+	
+
+	//cout << "Hello world!" << endl;
 	return 0;
 }
