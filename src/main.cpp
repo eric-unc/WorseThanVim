@@ -12,6 +12,11 @@ class State {
 
 public:
 	State(vector<string>& buffer);
+	string get_line_at(size_t a);
+	string get_current_line();
+	size_t num_lines();
+	size_t get_addr();
+	void set_addr(size_t new_addr);
 };
 
 bool prompt(State& state);
@@ -21,6 +26,26 @@ State::State(vector<string>& b){
 	buffer = b;
 	addr = 0;
 	yank_buffer = "";
+}
+
+string State::get_line_at(size_t a){
+	return buffer[a];
+}
+
+string State::get_current_line(){
+	return buffer[addr];
+}
+
+size_t State::num_lines(){
+	return buffer.size();
+}
+
+size_t State::get_addr(){
+	return addr;
+}
+
+void State::set_addr(size_t new_addr){
+	addr = new_addr;
 }
 
 int main(int argc, char **argv){
@@ -39,7 +64,6 @@ int main(int argc, char **argv){
 	if(file.is_open()){
 		string line;
 		while(getline(file, line)){
-			cout << line << endl;
 			buffer.push_back(line);
 		}
 
@@ -75,13 +99,31 @@ bool prompt(State& state){
 }
 
 bool run_command(State& state, string s){
-	if (s == "w\n") {
-		cout << "w + nl" << endl;
+	if(s == "."){
+		cout << state.get_current_line() << endl;
+	}else if (s == "r"){
+		cout << state.get_addr() << endl;
+	}else if (s == "^"){
+		state.set_addr(0);
+	}else if (s == "$"){
+		state.set_addr(state.num_lines() - 1);
+	}else if (s == "+"){
+	}else if (s == "-"){
+	}else if (s == "a"){
+	}else if (s == "A"){
+	}else if (s == "c"){
+	}else if (s == "d"){
+	}else if (s == "y"){
+	}else if (s == "x"){
+	}else if (s == "p"){
+	}else if (s == "P"){
+	}else if (s == "w"){
+	}else if (s == "q"){
 		return false;
-	} else if (s == "w") {
-		cout << "w" << endl;
-		return false;
-	} else {
-		return true;
+	}else{
+
 	}
+		
+
+	return true;
 }
