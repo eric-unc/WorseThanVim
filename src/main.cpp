@@ -17,6 +17,8 @@ public:
 	size_t num_lines();
 	size_t get_addr();
 	void set_addr(size_t new_addr);
+	void inc_addr();
+	void dec_addr();
 };
 
 bool prompt(State& state);
@@ -46,6 +48,14 @@ size_t State::get_addr(){
 
 void State::set_addr(size_t new_addr){
 	addr = new_addr;
+}
+
+void State::inc_addr(){
+	addr++;
+}
+
+void State::dec_addr(){
+	addr--;
 }
 
 int main(int argc, char **argv){
@@ -108,7 +118,17 @@ bool run_command(State& state, string s){
 	}else if (s == "$"){
 		state.set_addr(state.num_lines() - 1);
 	}else if (s == "+"){
+		if(state.get_addr() + 1 >= state.num_lines()){
+			cout << "?" << endl;
+		}else{
+			state.inc_addr();
+		}
 	}else if (s == "-"){
+		if(state.get_addr() == 0){
+			cout << "?" << endl;
+		}else{
+			state.dec_addr();
+		}
 	}else if (s == "a"){
 	}else if (s == "A"){
 	}else if (s == "c"){
