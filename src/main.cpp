@@ -6,25 +6,30 @@
 using namespace std;
 
 class State {
+	fstream *file;
 	vector<string> buffer;
 	size_t addr;
 	string yank_buffer;
 
 public:
-	State(vector<string>& buffer);
+	State(fstream *file, vector<string>& buffer);
 	string get_line_at(size_t a);
+	void set_line_at(size_t a, string s);
+	void add_line_at(size_t a, string s);
 	string get_current_line();
 	size_t num_lines();
 	size_t get_addr();
 	void set_addr(size_t new_addr);
 	void inc_addr();
 	void dec_addr();
+	void save();
 };
 
 bool prompt(State& state);
 bool run_command(State& state, string s);
 
-State::State(vector<string>& b){
+State::State(fstream *f, vector<string>& b){
+	file = f;
 	buffer = b;
 	addr = 0;
 	yank_buffer = "";
@@ -32,6 +37,14 @@ State::State(vector<string>& b){
 
 string State::get_line_at(size_t a){
 	return buffer[a];
+}
+
+void State::set_line_at(size_t a, string s){
+	buffer[a] = s;
+}
+
+void State::add_line_at(size_t a, string s){
+	buffer.insert(buffer.begin() + a, s);
 }
 
 string State::get_current_line(){
@@ -56,6 +69,12 @@ void State::inc_addr(){
 
 void State::dec_addr(){
 	addr--;
+}
+
+void State::save(){
+	for(size_t i = 0; i < buffer.size(); i++){
+		*file << buffer[i] << endl;
+	}
 }
 
 int main(int argc, char **argv){
@@ -90,14 +109,9 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
-	State state(buffer);
+	State state(&file, buffer);
 
 	while (prompt(state));
-
-	// writeback step
-	for(size_t i = 0; i < buffer.size(); i++){
-		file << buffer[i] << endl;
-	}
 	
 	return 0;
 }
@@ -130,6 +144,15 @@ bool run_command(State& state, string s){
 			state.dec_addr();
 		}
 	}else if (s == "a"){
+		while(true){
+			string line;
+			cin >> line;
+
+			if(line == ".") break;
+
+			state.add_line_at(state.get_addr() + 1, line);
+			state.inc_addr();
+		}
 	}else if (s == "A"){
 	}else if (s == "c"){
 	}else if (s == "d"){
@@ -138,6 +161,7 @@ bool run_command(State& state, string s){
 	}else if (s == "p"){
 	}else if (s == "P"){
 	}else if (s == "w"){
+		state.save();
 	}else if (s == "q"){
 		return false;
 	}else{
