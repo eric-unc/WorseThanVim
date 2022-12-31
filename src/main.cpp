@@ -23,6 +23,8 @@ public:
 	void set_addr(size_t new_addr);
 	void inc_addr();
 	void dec_addr();
+	string get_yank_buffer();
+	void set_yank_buffer(string s);
 	void save();
 };
 
@@ -75,6 +77,14 @@ void State::inc_addr(){
 
 void State::dec_addr(){
 	addr--;
+}
+
+string State::get_yank_buffer(){
+	return yank_buffer;
+}
+
+void State::set_yank_buffer(string s){
+	yank_buffer = s;
 }
 
 void State::save(){
@@ -187,6 +197,7 @@ bool run_command(State& state, string s){
 			}
 		}
 	}else if (s == "y"){
+		state.set_yank_buffer(state.get_current_line());
 	}else if (s == "x"){
 	}else if (s == "p"){
 	}else if (s == "P"){
