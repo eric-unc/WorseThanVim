@@ -154,7 +154,20 @@ bool run_command(State& state, string s){
 			state.inc_addr();
 		}
 	}else if (s == "A"){
+		while(true){
+			string line;
+			cin >> line;
+
+			if(line == ".") break;
+
+			state.add_line_at(state.get_addr(), line);
+			state.inc_addr();
+		}
 	}else if (s == "c"){
+		string line;
+		cin >> line;
+
+		if(line != ".") state.set_line_at(state.get_addr(), line);
 	}else if (s == "d"){
 	}else if (s == "y"){
 	}else if (s == "x"){
