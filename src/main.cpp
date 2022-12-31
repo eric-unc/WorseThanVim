@@ -15,6 +15,7 @@ public:
 	State(fstream *file, vector<string>& buffer);
 	string get_line_at(size_t a);
 	void set_line_at(size_t a, string s);
+	void remove_line_at(size_t a);
 	void add_line_at(size_t a, string s);
 	string get_current_line();
 	size_t num_lines();
@@ -42,6 +43,11 @@ string State::get_line_at(size_t a){
 void State::set_line_at(size_t a, string s){
 	buffer[a] = s;
 }
+
+void State::remove_line_at(size_t a){
+	buffer.erase(buffer.begin() + a);
+}
+
 
 void State::add_line_at(size_t a, string s){
 	buffer.insert(buffer.begin() + a, s);
@@ -169,6 +175,17 @@ bool run_command(State& state, string s){
 
 		if(line != ".") state.set_line_at(state.get_addr(), line);
 	}else if (s == "d"){
+		if(state.num_lines() != 1){
+			state.remove_line_at(state.get_addr());
+
+			if(state.get_addr() == state.num_lines()) state.dec_addr();
+		}else{
+			if(state.get_current_line() != ""){
+				state.set_line_at(0, "");
+			}else{
+				cout << "?" << endl;
+			}
+		}
 	}else if (s == "y"){
 	}else if (s == "x"){
 	}else if (s == "p"){
