@@ -199,8 +199,33 @@ bool run_command(State& state, string s){
 	}else if (s == "y"){
 		state.set_yank_buffer(state.get_current_line());
 	}else if (s == "x"){
+		if(state.num_lines() != 1){
+			state.set_yank_buffer(state.get_current_line());
+			state.remove_line_at(state.get_addr());
+
+			if(state.get_addr() == state.num_lines()) state.dec_addr();
+		}else{
+			if(state.get_current_line() != ""){
+				state.set_yank_buffer(state.get_current_line());
+				state.set_line_at(0, "");
+			}else{
+				cout << "?" << endl;
+			}
+		}
 	}else if (s == "p"){
+		if(state.get_yank_buffer() != ""){
+			state.add_line_at(state.get_addr() + 1, state.get_yank_buffer());
+			state.inc_addr();
+		}else{
+			cout << "?" << endl;
+		}
 	}else if (s == "P"){
+		if(state.get_yank_buffer() != ""){
+			state.add_line_at(state.get_addr(), state.get_yank_buffer());
+			state.inc_addr();
+		}else{
+			cout << "?" << endl;
+		}
 	}else if (s == "w"){
 		state.save();
 	}else if (s == "q"){
