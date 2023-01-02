@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -231,7 +232,28 @@ bool run_command(State& state, string s){
 	}else if (s == "q"){
 		return false;
 	}else{
+		regex num("^(\\d+)$");
+		regex dot_num("^.(\\d+)$");
 
+		smatch m;
+
+		if(regex_match(s, m, num)){
+			size_t line_num = stoul(s);
+			if(line_num >= state.num_lines()){
+				cout << "?" << endl;
+			}else{
+				state.set_addr(line_num);
+			}
+		}else if(regex_match(s, m, dot_num)){
+			size_t line_num = stoul(&s[1]);
+			if(line_num >= state.num_lines()){
+				cout << "?" << endl;
+			}else{
+				cout << state.get_line_at(line_num) << endl;
+			}
+		}else{
+			cout << "?" << endl;
+		}
 	}
 		
 

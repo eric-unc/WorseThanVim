@@ -10,7 +10,7 @@ All of this work was done in a container. Do `./build-image.ps1` or `./build-ima
 Given the proper environment, the `Makefile` in `src` is enough to compile a the project. Just do `make`. Then move the `wtv` binary executable to somewhere on the path.
 
 ## Running
-BetterThanVim's README describes how the project works. This should work the same. It's a WIP rn, though, of course.
+BetterThanVim's README describes how the project works. This should work the same.
 
 ## Authors
 Just me (Eric Schneider) again.
